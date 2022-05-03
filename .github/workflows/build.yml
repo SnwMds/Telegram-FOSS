@@ -32,6 +32,7 @@ jobs:
     - name: Build
       env:
         NDK: ${{ steps.setup-ndk.outputs.ndk-path }}
+      working-directory: TMessagesProj/jni
       run: |
         ./build_libvpx_clang.sh
         ./build_ffmpeg_clang.sh
