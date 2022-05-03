@@ -28,11 +28,17 @@ jobs:
         NDK: ${{ steps.setup-ndk.outputs.ndk-path }}
       working-directory: TMessagesProj/jni
       run: |
-        echo -e 'APP_ID = ${{ secrets.API_ID }}\nAPP_HASH = ${{ secrets.API_HASH }}' > API_KEYS
         ./build_libvpx_clang.sh
         ./build_ffmpeg_clang.sh
         ./patch_ffmpeg.sh
         ./patch_boringssl.sh
         ./build_boringssl.sh
+    - name: Setup API_ID & API_HASH
+      run: echo -e 'APP_ID = ${{ secrets.API_ID }}\nAPP_HASH = ${{ secrets.API_HASH }}' > API_KEYS
     - name: Assemble APK
       run: ./gradlew --no-daemon assembleAfatRelease
+    - name: Upload APK
+      uses: actions/upload-artifact@main
+      with:
+        name: a
+        path: app/build/outputs/apk/release/app-release-unsigned.apk
