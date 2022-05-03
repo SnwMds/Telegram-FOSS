@@ -17,7 +17,9 @@ jobs:
         submodules: true
     - name: Install build dependencies
       run: |
-        sudo apt-get update && sudo apt-get install -y openjdk-11-jdk-headless ninja-build golang-go yasm
+        sudo apt-get update
+        sudo apt-get install -y openjdk-11-jdk-headless ninja-build golang-go yasm
+        update-alternatives --auto java
     - name: Set up NDK r21e
       uses: nttld/setup-ndk@main
       id: setup-ndk
@@ -26,6 +28,7 @@ jobs:
     - name: Build dependencies
       env:
         NDK: ${{ steps.setup-ndk.outputs.ndk-path }}
+        NINJA_PATH: /usr/bin/ninja
       working-directory: TMessagesProj/jni
       run: |
         ./build_libvpx_clang.sh
